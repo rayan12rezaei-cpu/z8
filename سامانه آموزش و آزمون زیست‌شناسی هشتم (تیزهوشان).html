@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>زیست‌شناسی هشتم تیزهوشان | سامانه جامع یادگیری و آزمون</title>
+    <!-- فونت وزیرمتن برای خوانایی بالا در متون علمی فارسی -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+    <!-- تیلویند CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        slate: {
+                            850: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            overflow-x: hidden;
+        }
+
+        /* انیمیشن چرخش فلش‌کارت سه‌بعدی */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        /* انیمیشن نرم آکاردئون */
+        .accordion-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s ease-out;
+        }
+        .accordion-content.open {
+            grid-template-rows: 1fr;
+        }
+        .accordion-inner {
+            overflow: hidden;
+        }
+
+        /* اسکرول‌بار سفارشی */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* افکت شیشه‌ای هدر */
+        .glass-header {
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- هدر و نوار ناوبری اصلی -->
+    <header class="glass-header text-white sticky top-0 z-50 shadow-lg border-b border-emerald-500/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between py-3 md:h-20 gap-3">
+                <!-- لوگو و عنوان -->
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow-md shadow-emerald-500/30">
+                        <!-- آیکون DNA سفارشی -->
+                        <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 15c6.667-6 13.333 0 20-6"/>
+                            <path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/>
+                            <path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/>
+                            <path d="M17 6l-2.5-2.5"/>
+                            <path d="M14 8l-1-1"/>
+                            <path d="M7 18l2.5 2.5"/>
+                            <path d="M3.5 14.5l.5.5"/>
+                            <path d="M20 9l.5.5"/>
+                            <path d="M6.5 12.5l1 1"/>
+                            <path d="M16.5 10.5l1 1"/>
+                            <path d="M10 16l1.5 1.5"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                            زیست‌شناسی هشتم
+                            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ویژه سمپاد</span>
+                        </h1>
+                        <p class="text-xs text-slate-300">درسنامه ترکیبی، فلش‌کارت و بانک آزمون تیزهوشان</p>
+                    </div>
+                </div>
+
+                <!-- تب‌های جابجایی بین بخش‌ها -->
+                <nav class="flex bg-slate-800/80 p-1.5 rounded-2xl border border-slate-700 w-full md:w-auto justify-center">
+                    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="nav-btn flex-1 md:flex-none px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 bg-emerald-600 text-white shadow">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        جزوه و مفاهیم
+                    </button>
+                    <button onclick="switchTab('flashcards')" id="tab-flashcards" class="nav-btn flex-1 md:flex-none px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 text-slate-300 hover:text-white">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        فلش‌کارت سریع
+                    </button>
+                    <button onclick="switchTab('quiz')" id="tab-quiz" class="nav-btn flex-1 md:flex-none px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 text-slate-300 hover:text-white">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        آزمون و بانک تست
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- نوار جستجو و فیلتر سراسری -->
+    <section class="bg-white border-b border-slate-200 py-4 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
+                <!-- کادر جستجو -->
+                <div class="relative w-full lg:w-96">
+                    <input type="text" id="global-search" oninput="handleFilterChange()" placeholder="جستجو در نکات، اصطلاحات (مثلاً: بصل‌النخاع، میتوز، آکرومگالی)..." class="w-full pl-4 pr-10 py-2.5 rounded-xl border border-slate-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none text-sm transition-all bg-slate-50 focus:bg-white">
+                    <svg class="w-5 h-5 text-slate-400 absolute right-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+
+                <!-- دکمه‌های فیلتر فصل‌ها -->
+                <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto justify-start lg:justify-end" id="chapter-filters">
+                    <button onclick="setChapterFilter('all')" data-chapter="all" class="filter-chip px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-900 text-white shadow-sm transition-all">همه فصل‌ها</button>
+                    <button onclick="setChapterFilter('ch1')" data-chapter="ch1" class="filter-chip px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all">۱. تنظیم عصبی</button>
+                    <button onclick="setChapterFilter('ch2')" data-chapter="ch2" class="filter-chip px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all">۲. حس و حرکت</button>
+                    <button onclick="setChapterFilter('ch3')" data-chapter="ch3" class="filter-chip px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all">۳. تنظیم هورمونی</button>
+                    <button onclick="setChapterFilter('ch4')" data-chapter="ch4" class="filter-chip px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all">۴. الفبای زیست‌فناوری</button>
+                    <button onclick="setChapterFilter('ch5')" data-chapter="ch5" class="filter-chip px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all">۵. تولیدمثل در جانداران</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- بدنه اصلی محتوا -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= بخش ۱: داشبورد و جزوه تیزهوشان ================= -->
+        <div id="view-dashboard" class="space-y-8">
+            <!-- کارت‌های آماری داشبورد -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-extrabold text-xl">۵</div>
+                    <div>
+                        <div class="text-xs text-slate-500 font-medium">فصل‌های زیست هشتم</div>
+                        <div class="text-base font-extrabold text-slate-800">پوشش کامل کتاب</div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center font-extrabold text-xl" id="stat-notes-count">۰</div>
+                    <div>
+                        <div class="text-xs text-slate-500 font-medium">درسنامه و نکات ترکیبی</div>
+                        <div class="text-base font-extrabold text-slate-800">سطح سمپاد</div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-extrabold text-xl" id="stat-questions-count">۰</div>
+                    <div>
+                        <div class="text-xs text-slate-500 font-medium">تست تحلیلی و مفهومی</div>
+                        <div class="text-base font-extrabold text-slate-800">همراه با پاسخ تشریحی</div>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center font-extrabold text-xl" id="stat-mastered-count">۰٪</div>
+                    <div>
+                        <div class="text-xs text-slate-500 font-medium">پیشرفت مطالعه شما</div>
+                        <div class="text-base font-extrabold text-slate-800">نکات مرور شده</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- راهنمای سریع و دکمه باز/بسته کردن همه -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-gradient-to-l from-slate-900 to-emerald-950 text-white p-5 rounded-2xl shadow-md">
+                <div>
+                    <h2 class="text-lg font-bold flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        جزوه جامع و نکات طلایی زیست‌شناسی هشتم
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-300 mt-1">روی هر مبحث کلیک کنید تا نکات کلیدی، مقایسه‌های تیزهوشانی و هشدارهای طراحان سوال نمایش داده شود.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="toggleAllAccordions(true)" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold transition shadow">باز کردن همه</button>
+                    <button onclick="toggleAllAccordions(false)" class="px-3.5 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-xs font-bold transition">بستن همه</button>
+                </div>
+            </div>
+
+            <!-- کانتینر کارت‌های آکاردئونی جزوه -->
+            <div id="notes-container" class="space-y-4">
+                <!-- محتوا با جاوااسکریپت رندر می‌شود -->
+            </div>
+        </div>
+
+        <!-- ================= بخش ۲: فلش‌کارت‌های مرور سریع ================= -->
+        <div id="view-flashcards" class="hidden space-y-6">
+            <div class="max-w-2xl mx-auto text-center space-y-2">
+                <h2 class="text-2xl font-extrabold text-slate-900">فلش‌کارت‌های مرور سریع سمپاد</h2>
+                <p class="text-sm text-slate-600">برای مشاهده پاسخ علمی و نکته تیزهوشانی، روی کارت کلیک کنید. می‌توانید با فیلتر بالای صفحه فصل دلخواه را انتخاب کنید.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto">
+                <!-- شمارنده و نوار پیشرفت فلش‌کارت -->
+                <div class="flex items-center justify-between mb-3 px-2">
+                    <span class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800" id="fc-chapter-badge">فصل اول</span>
+                    <span class="text-sm font-bold text-slate-600" id="fc-counter">کارت ۱ از ۲۰</span>
+                </div>
+
+                <!-- بدنه سه‌بعدی کارت -->
+                <div class="perspective-1000 h-80 sm:h-96 cursor-pointer select-none" onclick="flipFlashcard()">
+                    <div id="flashcard-inner" class="relative w-full h-full transform-style-3d">
+                        <!-- روی کارت (سوال/مفهوم) -->
+                        <div class="absolute inset-0 backface-hidden bg-white rounded-3xl border-2 border-slate-200 shadow-xl p-6 sm:p-10 flex flex-col items-center justify-between text-center">
+                            <span class="text-xs font-semibold text-slate-400 tracking-wide">پرسش مفهومی / تعریف</span>
+                            <h3 id="fc-front-text" class="text-xl sm:text-2xl font-extrabold text-slate-800 leading-relaxed">
+                                در حال بارگذاری...
+                            </h3>
+                            <div class="flex items-center gap-2 text-xs text-emerald-600 font-bold bg-emerald-50 px-4 py-2 rounded-full">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                برای مشاهده پاسخ کلیک کنید
+                            </div>
+                        </div>
+
+                        <!-- پشت کارت (پاسخ و نکته ترکیبی) -->
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 bg-gradient-to-br from-slate-900 via-slate-850 to-emerald-950 text-white rounded-3xl border-2 border-emerald-500/40 shadow-xl p-6 sm:p-10 flex flex-col items-center justify-between text-center">
+                            <span class="text-xs font-semibold text-emerald-400">پاسخ علمی و نکته تیزهوشانی</span>
+                            <div class="space-y-4 overflow-y-auto max-h-56 px-2">
+                                <p id="fc-back-text" class="text-base sm:text-lg font-bold leading-relaxed text-white"></p>
+                                <div id="fc-tip-box" class="bg-emerald-500/15 border border-emerald-400/30 rounded-2xl p-3 text-xs sm:text-sm text-emerald-200 text-right"></div>
+                            </div>
+                            <span class="text-xs text-slate-400">کلیک مجدد برای بازگشت به سوال</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- دکمه‌های کنترل فلش‌کارت -->
+                <div class="flex items-center justify-between gap-4 mt-6">
+                    <button onclick="prevFlashcard()" class="flex-1 py-3.5 px-5 rounded-2xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-bold text-sm shadow-sm transition flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        کارت قبلی
+                    </button>
+                    <button onclick="shuffleFlashcards()" class="py-3.5 px-5 rounded-2xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-sm transition" title="تصادفی‌سازی کارت‌ها">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </button>
+                    <button onclick="nextFlashcard()" class="flex-1 py-3.5 px-5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 transition flex items-center justify-center gap-2">
+                        کارت بعدی
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= بخش ۳: بانک سوالات و آزمون آنلاین ================= -->
+        <div id="view-quiz" class="hidden space-y-6">
+            <!-- پنل کنترل آزمون (تایمر، حالت آزمون و کارنامه) -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="bg-slate-900 text-white px-4 py-2.5 rounded-xl flex items-center gap-2.5 shadow-inner">
+                        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="text-xs text-slate-300">زمان آزمون:</span>
+                        <span id="quiz-timer" class="font-mono text-base font-extrabold text-emerald-300">00:00</span>
+                    </div>
+
+                    <div class="flex items-center gap-2 bg-slate-100 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-700">
+                        <span>پاسخ داده شده:</span>
+                        <span id="quiz-progress-text" class="text-emerald-700">۰ از ۰</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto justify-end">
+                    <button onclick="resetQuiz()" class="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold transition">
+                        شروع مجدد آزمون
+                    </button>
+                    <button onclick="calculateExamResult()" class="px-5 py-2.5 rounded-xl bg-gradient-to-l from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white text-xs sm:text-sm font-extrabold shadow-md shadow-emerald-600/20 transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        صدور کارنامه و محاسبه تراز
+                    </button>
+                </div>
+            </div>
+
+            <!-- باکس نمایش کارنامه نهایی (در ابتدا مخفی) -->
+            <div id="exam-result-box" class="hidden bg-gradient-to-br from-slate-900 via-slate-850 to-emerald-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-emerald-500/30">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-2 text-center md:text-right">
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">کارنامه تحلیلی آزمون سمپاد</span>
+                        <h3 class="text-2xl font-extrabold" id="result-title">نتیجه عملکرد شما</h3>
+                        <p class="text-sm text-slate-300" id="result-feedback">تحلیل علمی عملکرد بر اساس نمره منفی استاندارد آزمون‌های تیزهوشان</p>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full md:w-auto">
+                        <div class="bg-white/10 backdrop-blur rounded-2xl p-4 text-center border border-white/10">
+                            <div class="text-xs text-slate-300">درصد خالص</div>
+                            <div class="text-2xl font-extrabold text-emerald-400 mt-1" id="res-percent">۰٪</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur rounded-2xl p-4 text-center border border-white/10">
+                            <div class="text-xs text-slate-300">تراز تخمینی</div>
+                            <div class="text-2xl font-extrabold text-amber-300 mt-1" id="res-taraz">۵۰۰۰</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur rounded-2xl p-4 text-center border border-white/10">
+                            <div class="text-xs text-slate-300">پاسخ صحیح</div>
+                            <div class="text-2xl font-extrabold text-green-400 mt-1" id="res-correct">۰</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur rounded-2xl p-4 text-center border border-white/10">
+                            <div class="text-xs text-slate-300">غلط / نزده</div>
+                            <div class="text-2xl font-extrabold text-rose-400 mt-1" id="res-wrong">۰ / ۰</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- لیست سوالات آزمون -->
+            <div id="questions-container" class="space-y-6">
+                <!-- سوالات از طریق جاوااسکریپت رندر می‌شوند -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- فوتر -->
+    <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+            <p>طراحی شده بر اساس سرفصل‌های زیست‌شناسی علوم تجربی پایه هشتم و سوالات سطح تیزهوشان</p>
+            <p class="text-emerald-400 font-semibold">موفقیت در آزمون‌های سمپاد با یادگیری عمیق و ترکیبی</p>
+        </div>
+    </footer>
+
+    <!-- اسکریپت کامل منطق برنامه و داده‌های آموزشی -->
+    <script>
+        // ============================================================================
+        // ۱. پایگاه داده محتوای آموزشی (برگرفته دقیق از جزوه زیست هشتم و نکات سمپاد)
+        // ============================================================================
+        const studyNotes = [
+            {
+                id: 'n1',
+                chapter: 'ch1',
+                chapterTitle: 'فصل اول: تنظیم عصبی',
+                title: 'ساختار دستگاه عصبی مرکزی (مغز و نخاع) و ساقه مغز',
+                badge: 'نکته کلیدی امتحان',
+                summary: 'بدن انسان (حدود ۳۰ تریلیون سلول) برای هماهنگی دقیق دارای دو دستگاه عصبی (پیام الکتریکی سریع و کوتاه‌مدت) و هورمونی (پیام شیمیایی کند و ماندگار) است.',
+                points: [
+                    '<strong>بخش‌های مغز:</strong> شامل مخ، مخچه و ساقه مغز (مغز میانی، پل مغزی و بصل‌النخاع) است. توجه کنید که <em>نخاع جزو مغز نیست</em> اما جزو دستگاه عصبی مرکزی است.',
+                    '<strong>بصل‌النخاع (پیاز مغز / گره حیات):</strong> پایین‌ترین بخش ساقه مغز است که مراکز کنترل تنفس، ضربان قلب و فشار خون در آن قرار دارد. آسیب به آن به سرعت باعث مرگ می‌شود.',
+                    '<strong>مخچه:</strong> در پشت ساقه مغز قرار دارد و دو نیمکره آن به وسیله بخش وسطی به نام <em>کرمینه</em> به هم متصل‌اند. وظیفه آن حفظ تعادل (با دریافت اطلاعات از گوش داخلی، چشم و ماهیچه‌ها) و هماهنگی حرکات است.',
+                    '<strong>جسم پینه‌ای و هیپوکامپ:</strong> دو نیمکره مخ از طریق جسم پینه‌ای ارتباط دارند. <em>هیپوکامپ</em> (شبیه اسب دریایی) در یادگیری و تبدیل حافظه کوتاه‌مدت به بلندمدت نقش حیاتی دارد.',
+                    '<strong>ماده سفید و خاکستری:</strong> در مخ، بخش خاکستری (جسم سلولی نورون‌ها) در قشر بیرونی و بخش سفید (رشته‌های میلین‌دار) در داخل است؛ اما در نخاع <em>برعکس</em> است (خاکستری پروانه‌ای شکل در مرکز و سفید در اطراف).'
+                ],
+                sampadTip: 'در برش عرضی نخاع، ریشه پشتی فقط حاوی نورون‌های حسی (ورودی) و ریشه شکمی فقط حاوی نورون‌های حرکتی (خروجی) است. همچنین پیام‌های حسی سر و صورت (مثل بینایی و شنوایی) از نخاع عبور نمی‌کنند و مستقیم به مغز می‌روند!'
+            },
+            {
+                id: 'n2',
+                chapter: 'ch1',
+                chapterTitle: 'فصل اول: تنظیم عصبی',
+                title: 'بافت عصبی، نورون‌ها، سلول‌های پشتیبان و انعکاس (بازتاب)',
+                badge: 'ترکیبی و تحلیلی',
+                summary: 'بافت عصبی از دو گروه سلول تشکیل شده است: یاخته‌های عصبی (نورون‌ها) و یاخته‌های پشتیبان (نوروگلیا).',
+                points: [
+                    '<strong>اجزای نورون و جهت پیام:</strong> دندریت پیام را دریافت و به جسم سلولی می‌برد؛ آکسون پیام را از جسم سلولی دور کرده و به پایانه آکسونی می‌رساند (جهت پیام همیشه از دندریت ← جسم سلولی ← آکسون).',
+                    '<strong>سلول‌های پشتیبان (نوروگلیا):</strong> تعدادشان چندین برابر نورون‌هاست، توانایی تقسیم دارند، هدایت پیام عصبی انجام نمی‌دهند اما در تغذیه نورون، دفاع و ساخت غلاف میلین (سلول‌های شوان) نقش دارند.',
+                    '<strong>بیماری ام‌اس (MS):</strong> یک بیماری خودایمنی است که در آن دستگاه ایمنی به غلاف میلین نورون‌های مغز و نخاع (دستگاه عصبی مرکزی) حمله کرده و سرعت هدایت پیام را مختل می‌کند.',
+                    '<strong>اعمال انعکاسی (بازتابی):</strong> پاسخ‌های سریع، غیرارادی و بدون تفکر به محرک‌ها (مثل عقب کشیدن دست از جسم داغ، عطسه، سرفه، تغییر قطر مردمک و ریزش اشک).',
+                    '<strong>انواع عصب و تعداد اعصاب نخاعی:</strong> اعصاب به سه دسته حسی، حرکتی و مختلط تقسیم می‌شوند. انسان دارای ۳۱ جفت (۶۲ عدد) عصب نخاعی و ۱۲ جفت عصب مغزی است.'
+                ],
+                sampadTip: 'اگر نخاع از ناحیه کمر قطع شود، فرد در پاها حس و حرکت ارادی ندارد، اما چون مرکز انعکاس زردپی زیر زانو در نخاع است، با ضربه به زیر زانو پای او همچنان به بالا می‌پرد! همچنین پیام بویایی تنها پیام حسی است که بدون عبور از تالاموس به قشر مخ می‌رود.'
+            },
+            {
+                id: 'n3',
+                chapter: 'ch2',
+                chapterTitle: 'فصل دوم: حس و حرکت',
+                title: 'ساختار پوست، گیرنده‌های حسی و حس‌های ویژه',
+                badge: 'مقایسه‌ای',
+                summary: 'پوست بزرگ‌ترین اندام بدن و اولین خط دفاعی غیر اختصاصی است که از سه لایه اپیدرم (روپوست)، درم (پوست میانی) و هیپودرم (زیرپوست) تشکیل شده است.',
+                points: [
+                    '<strong>گیرنده‌های پوست:</strong> شامل گیرنده‌های درد، دما (گرما و سرما)، لمس و فشار هستند.',
+                    '<strong>مقایسه گیرنده درد و فشار:</strong> گیرنده <em>درد</em> سطحی‌ترین گیرنده پوست است، فاقد غلاف پیوندی است و از غشای پایه عبور کرده و وارد اپیدرم می‌شود (با محرک‌های شدید که احتمال آسیب به بافت دارند تحریک می‌شود). اما گیرنده <em>فشار</em> عمقی‌ترین گیرنده پوست است و غلاف پیوندی چندلایه دارد.',
+                    '<strong>گیرنده‌های تنشی و تعادلی:</strong> گیرنده‌های تنشی در ماهیچه‌های اسکلتی و زردپی‌ها قرار دارند و مغز را از وضعیت انقباض ماهیچه‌ها آگاه می‌کنند. گیرنده‌های تعادلی در مجاری نیم‌دایره‌ای گوش داخلی قرار دارند.'
+                ],
+                sampadTip: 'در بیماری دیابت کنترل‌نشده یا سرمای بسیار شدید طولانی‌مدت، گیرنده‌های درد و سرما ممکن است از کار بیفتند که خطر آسیب بافتی بدون احساس درد را ایجاد می‌کند.'
+            },
+            {
+                id: 'n4',
+                chapter: 'ch2',
+                chapterTitle: 'فصل دوم: حس و حرکت',
+                title: 'دستگاه حرکتی: استخوان‌بندی و انواع ماهیچه‌ها',
+                badge: 'جداول تیزهوشان',
+                summary: 'دستگاه حرکتی از دو بخش اسکلت (استخوان، غضروف، مفصل) و ماهیچه‌ها تشکیل شده که با همکاری یکدیگر باعث حرکت می‌شوند.',
+                points: [
+                    '<strong>انواع بافت استخوانی:</strong> ۱) <em>بافت متراکم</em> در تنه استخوان‌های دراز و سطح استخوان‌های پهن؛ ۲) <em>بافت اسفنجی (حفره‌دار)</em> در دو سر استخوان‌های دراز و وسط استخوان‌های پهن قرار دارد.',
+                    '<strong>ماده زمینه‌ای استخوان:</strong> شامل بخش بی‌شکل (مواد کانی مثل کلسیم، منیزیم و یون‌های سدیم و پتاسیم برای استحکام) و رشته‌های پروتئینی کلاژن (برای انعطاف‌پذیری).',
+                    '<strong>مقایسه سه نوع ماهیچه:</strong><br>• <em>اسکلتی (مخطط):</em> ارادی، قرمز، سلول‌های استوانه‌ای بدون انشعاب و چند هسته‌ای (روی استخوان‌ها).<br>• <em>قلبی:</em> غیرارادی، قرمز، سلول‌های استوانه‌ای منشعب با یک یا دو هسته (فقط در قلب).<br>• <em>صاف:</em> غیرارادی، سفید-صورتی، سلول‌های دوکی شکل و تک‌هسته‌ای (دیواره لوله گوارش، رگ‌ها و عنبیه چشم).',
+                    '<strong>عملکرد متقابل ماهیچه‌ها:</strong> ماهیچه‌های جلو بازو و پشت بازو جفت‌های متقابل‌اند؛ هنگام خم شدن ساعد، جلو بازو منقبض و پشت بازو منبسط (استراحت) است.'
+                ],
+                sampadTip: 'تاندون (زردپی) بافت پیوندی رشته‌ای و محکمی است که ماهیچه را به استخوان متصل می‌کند و نیروی انقباض را منتقل می‌سازد، در حالی که رباط استخوان را به استخوان در محل مفصل متصل نگه می‌دارد.'
+            },
+            {
+                id: 'n5',
+                chapter: 'ch3',
+                chapterTitle: 'فصل سوم: تنظیم هورمونی',
+                title: 'غدد درون‌ریز، پانکراس و اختلالات هورمونی (آکرومگالی)',
+                badge: 'نکات ترکیبی',
+                summary: 'هورمون‌ها پیک‌های شیمیایی هستند که از غدد درون‌ریز مستقیماً به خون ترشح شده و روی سلول‌های هدف دارای گیرنده اختصاصی اثر می‌گذارند.',
+                points: [
+                    '<strong>تفاوت تنظیم عصبی و هورمونی:</strong> پیام هورمونی از طریق خون منتقل می‌شود بنابراین سرعت آن کندتر، اثر آن گسترده‌تر و ماندگاری آن بسیار بیشتر از پیام عصبی است.',
+                    '<strong>غده هیپوفیز و هیپوتالاموس:</strong> هیپوفیز زیر مغز قرار دارد و فعالیت بسیاری از غدد دیگر را کنترل می‌کند، اما خود هیپوفیز تحت فرمان <em>هیپوتالاموس</em> (مرکز ارتباط دستگاه عصبی و هورمونی) است.',
+                    '<strong>بیماری آکرومگالی (زشت‌پیکری):</strong> اگر ترشح بیش از حد هورمون رشد (از هیپوفیز) بعد از بسته شدن صفحات رشد (پس از بلوغ و در بزرگسالی) ادامه یابد، استخوان‌ها به جای رشد طولی، <em>رشد قطری</em> بیش از حد پیدا کرده و فرم استخوان‌های صورت، دست و پا تغییر می‌کند.',
+                    '<strong>غده مختلط پانکراس (لوزالمعده):</strong> غده‌ای ۱۵ سانتی‌متری در پشت معده با دو بخش: ۱) <em>بخش برون‌ریز</em> (تولید آنزیم‌های گوارشی و ترشح از طریق مجرا به ابتدای روده باریک)؛ ۲) <em>بخش درون‌ریز</em> (جزایر لانگرهانس که تنها حدود ۵٪ پانکراس را تشکیل می‌دهند و هورمون‌های انسولین و گلوکاگون را به خون می‌ریزند).'
+                ],
+                sampadTip: 'پانکراس و غدد جنسی (تخمدان و بیضه) غدد مختلط هستند زیرا هم ترشحات برون‌ریز (آنزیم یا گامت از طریق مجرا) و هم ترشحات درون‌ریز (هورمون به داخل خون) دارند.'
+            },
+            {
+                id: 'n6',
+                chapter: 'ch4',
+                chapterTitle: 'فصل چهارم: الفبای زیست‌فناوری',
+                title: 'ساختار DNA، کروموزوم و مراحل تقسیم میتوز',
+                badge: 'بسیار مهم',
+                summary: 'اطلاعات وراثتی در هسته سلول و روی کروموزوم‌ها (DNA فشرده همراه با پروتئین) ذخیره شده است.',
+                points: [
+                    '<strong>ساختار نوکلئوتید و ژن:</strong> واحد سازنده DNA نوکلئوتید است که از ۳ بخش (قند ۵ کربنه، گروه فسفات و باز آلی نیتروژن‌دار) ساخته شده است. ژن بخشی از DNA است که دستور ساخت یک پروتئین خاص (عامل بروز صفت) را صادر می‌کند.',
+                    '<strong>تقسیم میتوز (تقسیم مساوی):</strong> از یک سلول مادر (2n)، دو سلول دختر کاملاً مشابه با همان تعداد کروموزوم تولید می‌شود. کاربرد: رشد، ترمیم بافت‌های آسیب‌دیده و تولیدمثل غیرجنسی.',
+                    '<strong>مراحل میتوز به ترتیب:</strong><br>۱. <em>پروفاز:</em> فشرده شدن کروموزوم‌ها، ناپدید شدن پوشش هسته و تشکیل دوک تقسیم.<br>۲. <em>متافاز:</em> ردیف شدن کروموزوم‌های مضاعف شده در استوای سلول (وسط سلول) و اتصال سانترومر به رشته‌های دوک.<br>۳. <em>آنافاز:</em> کوتاه شدن رشته‌های دوک و جدا شدن کروماتیدهای خواهری از محل سانترومر.<br>۴. <em>تلوفاز:</em> تشکیل مجدد پوشش هسته در دو قطب و ناپدید شدن دوک.',
+                    '<strong>سیتوکینز (تقسیم سیتوپلاسم):</strong> همزمان با اواخر تلوفاز رخ می‌دهد و سلول به دو سلول مجزا تقسیم می‌شود.'
+                ],
+                sampadTip: 'مضاعف شدن DNA و دو برابر شدن سانترومرها قبل از شروع تقسیم میتوز (در مرحله اینترفاز) انجام می‌شود. در مرحله آنافاز با جدا شدن کروماتیدهای خواهری، تعداد کروموزوم‌های سلول موقتاً دو برابر می‌شود!'
+            },
+            {
+                id: 'n7',
+                chapter: 'ch5',
+                chapterTitle: 'فصل پنجم: تولیدمثل در جانداران',
+                title: 'انواع تولیدمثل غیرجنسی و جنسی، گامت‌ها و لقاح',
+                badge: 'جمع‌بندی جامع',
+                summary: 'تولیدمثل برخلاف تغذیه و تنفس برای بقای فرد ضروری نیست، بلکه ضامن بقای نسل یک گونه است.',
+                points: [
+                    '<strong>انواع تولیدمثل غیرجنسی:</strong><br>• <em>دونیم‌شدن:</em> باکتری (پروکاریوت) و آمیب (یوکاریوت).<br>• <em>جوانه‌زدن:</em> مخمر (قارچ تک‌سلولی) و اسفنج.<br>• <em>قطعه‌قطعه شدن:</em> خزه و ستاره دریایی (ترمیم).<br>• <em>هاگ‌زایی:</em> کپک، خزه، سرخس و قارچ خوراکی.<br>• <em>رویشی طبیعی:</em> غده (سیب‌زمینی)، پیاز (گل مریم)، ساقه زیرزمینی (زنبق)، ساقه رونده (توت‌فرنگی).<br>• <em>رویشی مصنوعی:</em> قلمه‌زدن (شمعدانی)، پیوندزدن (مرکبات و سیب)، خوابانیدن.',
+                    '<strong>جانداران هرمافرودیت (دوجنسی / تک‌پایه):</strong> اندام‌های تولیدمثلی نر و ماده روی یک بدن قرار دارند؛ مثل حلزون و کرم خاکی در جانوران، و گردو و نخل (تک‌پایه) در گیاهان.',
+                    '<strong>مقایسه گامت نر (اسپرم) و ماده (تخمک):</strong> اسپرم کوچک‌تر است، اندوخته غذایی بسیار کمی دارد و دارای تاژک (دم) برای حرکت است. تخمک درشت‌تر، بدون تاژک و سرشار از اندوخته غذایی است. گامت‌ها حاصل تقسیم <em>میوز</em> (نصف شدن کروموزوم‌ها) هستند.',
+                    '<strong>رشد در برابر نمو:</strong> <em>رشد</em> افزایش برگشت‌ناپذیر اندازه و تعداد سلول‌هاست، اما <em>نمو</em> عبور از مراحل مختلف زندگی و کسب توانایی‌های جدید (مثل بلوغ و بروز صفات ثانویه) است.',
+                    '<strong>لقاح داخلی و خارجی:</strong> در لقاح خارجی (ماهی‌ها و دوزیستان)، گامت‌ها در آب رها می‌شوند؛ بنابراین تعداد گامت‌ها باید بسیار زیاد باشد و مراقبت از تخم‌ها معمولاً وجود ندارد.'
+                ],
+                sampadTip: 'در انسان، یاخته تخم حاصل از لقاح اسپرم (۲۳ کروموزومی) و تخمک (۲۳ کروموزومی)، ۴۶ کروموزوم دارد و با تقسیم‌های متوالی <strong>میتوز</strong> و سپس <strong>تمایز</strong> سلولی، جنین کامل را می‌سازد.'
+            }
+        ];
+
+        // ============================================================================
+        // ۲. پایگاه داده فلش‌کارت‌های مرور سریع (۲۰ فلش‌کارت طلایی)
+        // ============================================================================
+        const flashcardsData = [
+            {
+                chapter: 'ch1',
+                chapterName: 'فصل ۱: تنظیم عصبی',
+                front: 'چرا به بصل‌النخاع «گره حیات» گفته می‌شود و در کدام بخش مغز قرار دارد؟',
+                back: 'بصل‌النخاع پایین‌ترین بخش ساقه مغز است که مراکز کنترل تنفس، ضربان قلب و فشار خون در آن قرار دارند. آسیب به آن باعث توقف تنفس و قلب و مرگ فوری می‌شود.',
+                tip: 'ساقه مغز شامل ۳ بخش از بالا به پایین است: مغز میانی، پل مغزی و بصل‌النخاع.'
+            },
+            {
+                chapter: 'ch1',
+                chapterName: 'فصل ۱: تنظیم عصبی',
+                front: 'تفاوت توزیع ماده سفید و ماده خاکستری در مخ و نخاع چیست؟',
+                back: 'در مخ، ماده خاکستری در قشر بیرونی و ماده سفید در بخش داخلی است؛ اما در نخاع، ماده خاکستری (پروانه‌ای شکل) در مرکز و ماده سفید در اطراف قرار دارد.',
+                tip: 'ماده خاکستری عمدتاً از جسم سلولی نورون‌ها و ماده سفید از آکسون‌ها و دندریت‌های میلین‌دار تشکیل شده است.'
+            },
+            {
+                chapter: 'ch1',
+                chapterName: 'فصل ۱: تنظیم عصبی',
+                front: 'کدام پیام حسی بدون عبور از تالاموس مستقیماً به قشر مخ می‌رود؟',
+                back: 'پیام عصبی مربوط به حس بویایی! سایر پیام‌های حسی (بینایی، شنوایی، چشایی و لامسه) ابتدا در تالاموس تقویت و پردازش شده و سپس به قشر مخ فرستاده می‌شوند.',
+                tip: 'سوال پرتکرار آزمون‌های تیزهوشان! تالاموس دروازه ورود اغلب اطلاعات حسی به مخ است.'
+            },
+            {
+                chapter: 'ch1',
+                chapterName: 'فصل ۱: تنظیم عصبی',
+                front: 'در انسان چند جفت عصب نخاعی و چند ریشه عصب نخاعی وجود دارد؟',
+                back: 'انسان دارای ۳۱ جفت (۶۲ عدد) عصب نخاعی است. چون هر عصب نخاعی دو ریشه (پشتی و شکمی) دارد، در کل ۶۲ جفت (۱۲۴ عدد) ریشه عصب نخاعی وجود دارد.',
+                tip: 'دقت محاسباتی: ۳۱ جفت عصب × ۲ ریشه برای هر عصب = ۶۲ جفت یا ۱۲۴ ریشه!'
+            },
+            {
+                chapter: 'ch1',
+                chapterName: 'فصل ۱: تنظیم عصبی',
+                front: 'نقش هیپوکامپ در مغز چیست و آسیب به آن چه عوارضی دارد؟',
+                back: 'هیپوکامپ (بخشی شبیه اسب دریایی) در یادگیری، جهت‌یابی و تبدیل حافظه کوتاه‌مدت به حافظه بلندمدت نقش دارد. تخریب آن باعث ناتوانی در یادگیری مطالب جدید می‌شود.',
+                tip: 'فردی که هیپوکامپش آسیب دیده، خاطرات قدیمی قبل از آسیب را به یاد می‌آورد اما مطالب جدید را حفظ نمی‌کند.'
+            },
+            {
+                chapter: 'ch1',
+                chapterName: 'فصل ۱: تنظیم عصبی',
+                front: 'ویروس فلج اطفال به کدام بخش سیستم عصبی حمله می‌کند و نتیجه آن چیست؟',
+                back: 'این ویروس با نفوذ به ماده خاکستری نخاع، جسم سلولی نورون‌های حرکتی را تخریب کرده و باعث فلج شدن ماهیچه‌های اسکلتی می‌شود (نورون حسی آسیب نمی‌بیند).',
+                tip: 'چون جسم سلولی نورون حسی بیرون از نخاع (در گره ریشه پشتی) قرار دارد، کمترین آسیب را می‌بیند.'
+            },
+            {
+                chapter: 'ch2',
+                chapterName: 'فصل ۲: حس و حرکت',
+                front: 'عمقی‌ترین و سطحی‌ترین گیرنده‌های پوست به ترتیب کدام‌اند و چه تفاوت ساختاری دارند؟',
+                back: 'عمقی‌ترین گیرنده پوست «فشار» است که غلاف پیوندی چندلایه دارد؛ سطحی‌ترین گیرنده پوست «درد» است که فاقد غلاف پیوندی بوده و از غشای پایه عبور کرده و وارد اپیدرم می‌شود.',
+                tip: 'گیرنده‌های درد تنها گیرنده‌هایی هستند که به درون لایه روپوست (اپیدرم) نفوذ می‌کنند.'
+            },
+            {
+                chapter: 'ch2',
+                chapterName: 'فصل ۲: حس و حرکت',
+                front: 'گیرنده‌های تنشی در کجا قرار دارند و وظیفه آن‌ها چیست؟',
+                back: 'در ماهیچه‌های اسکلتی و زردپی‌ها قرار دارند و به مغز و مخچه کمک می‌کنند تا از وضعیت کشیدگی و میزان انقباض ماهیچه‌ها آگاه شوند.',
+                tip: 'این گیرنده‌ها برای حفظ تعادل و هماهنگی حرکات بدن ضروری هستند.'
+            },
+            {
+                chapter: 'ch2',
+                chapterName: 'فصل ۲: حس و حرکت',
+                front: 'تفاوت بافت استخوانی متراکم و اسفنجی از نظر محل قرارگیری چیست؟',
+                back: 'بافت متراکم در تنه استخوان‌های دراز و سطح استخوان‌های پهن قرار دارد؛ اما بافت اسفنجی (حفره‌دار) در دو سر استخوان‌های دراز و وسط استخوان‌های پهن یافت می‌شود.',
+                tip: 'مغز قرمز استخوان (محل خون‌سازی) درون حفره‌های بافت استخوانی اسفنجی جای دارد.'
+            },
+            {
+                chapter: 'ch2',
+                chapterName: 'فصل ۲: حس و حرکت',
+                front: 'سه تفاوت مهم سلول‌های ماهیچه قلبی و ماهیچه صاف را نام ببرید.',
+                back: '۱) ماهیچه قلبی مخطط و منشعب است ولی صاف بدون خط و دوکی‌شکل است. ۲) قلبی قرمز و صاف سفید-صورتی است. ۳) قلبی یک یا دو هسته دارد ولی صاف تک‌هسته‌ای است.',
+                tip: 'وجه اشتراک هر دو: فعالیت غیرارادی دارند!'
+            },
+            {
+                chapter: 'ch3',
+                chapterName: 'فصل ۳: تنظیم هورمونی',
+                front: 'بیماری آکرومگالی (زشت‌پیکری) چگونه و در چه سنی ایجاد می‌شود؟',
+                back: 'در اثر ترشح بیش از حد هورمون رشد از غده هیپوفیز پس از پایان سن رشد طولی (بعد از بلوغ و در بزرگسالی) ایجاد می‌شود و باعث رشد قطری و ناموزون استخوان‌ها می‌گردد.',
+                tip: 'اگر افزایش هورمون رشد قبل از بسته شدن صفحات رشد (در کودکی) رخ دهد، باعث غول‌پیکری (ژیگانتیسم) می‌شود.'
+            },
+            {
+                chapter: 'ch3',
+                chapterName: 'فصل ۳: تنظیم هورمونی',
+                front: 'چرا پانکراس (لوزالمعده) را یک غده مختلط می‌نامند؟',
+                back: 'زیرا دارای دو بخش است: بخش برون‌ریز (تولید آنزیم‌های گوارشی و ترشح به دوازدهه از طریق مجرا) و بخش درون‌ریز (جزایر لانگرهانس که هورمون به خون می‌ریزند).',
+                tip: 'بخش درون‌ریز (جزایر لانگرهانس) فقط حدود ۵ درصد از کل پانکراس را تشکیل می‌دهد.'
+            },
+            {
+                chapter: 'ch3',
+                chapterName: 'فصل ۳: تنظیم هورمونی',
+                front: 'سه تفاوت کلیدی بین تنظیم عصبی و تنظیم هورمونی چیست؟',
+                back: '۱) ماهیت پیام (الکتریکی در برابر شیمیایی)؛ ۲) سرعت انتقال (بسیار سریع در عصبی، کندتر در هورمونی)؛ ۳) ماندگاری اثر (کوتاه‌مدت در عصبی، طولانی‌مدت در هورمونی).',
+                tip: 'هر دو دستگاه تحت هماهنگی عالی بدن با هم همکاری دارند و هیپوتالاموس رابط اصلی آن‌هاست.'
+            },
+            {
+                chapter: 'ch4',
+                chapterName: 'فصل ۴: الفبای زیست‌فناوری',
+                front: 'زیرواحد سازنده DNA چه نام دارد و از چند بخش تشکیل شده است؟',
+                back: 'نوکلئوتید؛ که از سه بخش تشکیل شده است: یک قند ۵ کربنه (دئوکسی‌ریبوز)، یک گروه فسفات و یک باز آلی نیتروژن‌دار.',
+                tip: 'توالی بازهای آلی در طول ژن است که نوع پروتئین ساخته شده و صفت وراثتی را تعیین می‌کند.'
+            },
+            {
+                chapter: 'ch4',
+                chapterName: 'فصل ۴: الفبای زیست‌فناوری',
+                front: 'در کدام مرحله تقسیم میتوز کروماتیدهای خواهری از هم جدا می‌شوند؟',
+                back: 'در مرحله آنافاز! با کوتاه شدن رشته‌های دوک تقسیم، کروماتیدهای خواهری از محل سانترومر جدا شده و به سمت دو قطب سلول کشیده می‌شوند.',
+                tip: 'در مرحله متافاز کروموزوم‌ها در وسط سلول ردیف می‌شوند و در آنافاز جدا می‌گردند.'
+            },
+            {
+                chapter: 'ch5',
+                chapterName: 'فصل ۵: تولیدمثل در جانداران',
+                front: 'تفاوت اصلی «رشد» و «نمو» در زیست‌شناسی چیست؟',
+                back: 'رشد به معنی بزرگ شدن اندازه سلول‌ها و افزایش تعداد آن‌هاست که برگشت‌ناپذیر است؛ اما نمو به معنی تغییر مراحل زندگی و کسب توانایی‌های جدید (مثل بلوغ) است.',
+                tip: 'تقسیم سلول تخم و تبدیل آن به جنین شامل هر سه فرآیند رشد، نمو و تمایز است.'
+            },
+            {
+                chapter: 'ch5',
+                chapterName: 'فصل ۵: تولیدمثل در جانداران',
+                front: 'چرا گامت‌های نر و ماده نمی‌توانند حاصل تقسیم میتوز باشند؟',
+                back: 'چون در تقسیم میتوز تعداد کروموزوم‌ها ثابت می‌ماند؛ اگر گامت‌ها با میتوز ساخته می‌شدند، هنگام لقاح تعداد کروموزوم‌های هر نسل دو برابر می‌شد!',
+                tip: 'بنابراین گامت‌ها با تقسیم میوز (تقسیم کاهشی) تولید می‌شوند تا عدد کروموزومی گونه ثابت بماند.'
+            },
+            {
+                chapter: 'ch5',
+                chapterName: 'فصل ۵: تولیدمثل در جانداران',
+                front: 'روش تولیدمثل غیرجنسی در مخمر، خزه و توت‌فرنگی به ترتیب چیست؟',
+                back: 'مخمر: جوانه زدن | خزه: هاگ‌زایی و قطعه‌قطعه شدن | توت‌فرنگی: تولیدمثل رویشی طبیعی (از طریق ساقه رونده) و همچنین خوابانیدن.',
+                tip: 'آمیب و باکتری هر دو با روش «دونیم‌شدن» تولیدمثل می‌کنند اما باکتری پروکاریوت و آمیب یوکاریوت است.'
+            }
+        ];
+
+        // ============================================================================
+        // ۳. بانک سوالات تیزهوشان (برگرفته و تکمیل شده از نمونه سوالات کلاس تقویتی سمپاد)
+        // ============================================================================
+        const quizQuestions = [
+            {
+                id: 1,
+                chapter: 'ch1',
+                difficulty: 'سطح سمپاد',
+                question: 'فردی در اثر سانحه دچار ضربان قلب و تنفس نامنظم شده است. به نظر شما کدام بخش از مغز این فرد آسیب دیده است؟',
+                options: [
+                    'لوب پس‌سری نیمکره‌های مخ',
+                    'مخچه',
+                    'پل مغزی',
+                    'بصل‌النخاع'
+                ],
+                correctIndex: 3,
+                explanation: 'بصل‌النخاع (پیاز مغز) پایین‌ترین بخش ساقه مغز است که مراکز اصلی تنظیم تنفس، ضربان قلب و فشار خون در آن قرار دارند و به همین دلیل به آن «گره حیات» می‌گویند. لوب پس‌سری مرکز بینایی و مخچه مرکز تعادل است.'
+            },
+            {
+                id: 2,
+                chapter: 'ch2',
+                difficulty: 'ترکیبی',
+                question: 'عبارت‌های زیر به ترتیب از بالا به پایین مربوط به کدام گیرنده‌های حسی هستند؟\n• با این گیرنده‌ها جهت جاذبه زمین حس می‌شود.\n• با محرک‌هایی که شدتشان زیاد است و احتمال آسیب بافتی دارند، تحریک می‌شوند.\n• به مغز کمک می‌کنند تا از شرایط انقباضی ماهیچه‌ها خبردار شود.\n• اگر به مدت طولانی در دمای پایین قرار بگیرند، از کار می‌افتند.',
+                options: [
+                    'تنشی، درد، تعادل، سرما',
+                    'تنشی، سرما، تعادل، درد',
+                    'تعادل، درد، تنشی، سرما',
+                    'تعادل، سرما، تنشی، درد'
+                ],
+                correctIndex: 2,
+                explanation: '۱) گیرنده‌های تعادلی در گوش داخلی جهت جاذبه و حرکت سر را تشخیص می‌دهند. ۲) گیرنده‌های درد با محرک‌های شدید تحریک می‌شوند. ۳) گیرنده‌های تنشی در ماهیچه‌ها و زردپی‌ها وضعیت انقباض را به مغز خبر می‌دهند. ۴) گیرنده‌های سرما در یخبندان طولانی از کار می‌افتند.'
+            },
+            {
+                id: 3,
+                chapter: 'ch1',
+                difficulty: 'تحلیلی - شکل',
+                question: 'اگر نخاع فردی از ناحیه وسط پشت (ناحیه سینه‌ای) به طور کامل قطع شود، کدام یک از عبارت‌های زیر در مورد این فرد درست است؟',
+                options: [
+                    'هیچ عمل انعکاسی در کل بدن این فرد انجام نمی‌شود.',
+                    'اگر چشم‌های این فرد بسته باشد و پشه‌ای پای راست او را نیش بزند، شخص نیش پشه را احساس می‌کند اما نمی‌تواند کاری انجام دهد.',
+                    'شخص هیچ حسی را در ناحیه پای چپ خود احساس نمی‌کند اما اگر پزشک ضربه‌ای به زیر زانوی این شخص وارد کند، پایش به بالا می‌پرد.',
+                    'اگر توپی به سمت صورت این شخص پرتاب شود، شخص نمی‌تواند پلک‌هایش را ببندد.'
+                ],
+                correctIndex: 2,
+                explanation: 'با قطع نخاع از ناحیه سینه، ارتباط حسی و حرکتی ارادی پاها با مغز قطع می‌شود (پس فرد نیش پشه یا ضربه را حس نمی‌کند)؛ اما چون مرکز انعکاس زردپی زیر زانو در بخش پایینی نخاع سالم است، با ضربه به زیر زانو پای فرد به صورت بازتابی بالا می‌پرد. همچنین انعکاس‌های سر و صورت (مثل پلک زدن) مربوط به مغز است و سالم می‌ماند.'
+            },
+            {
+                id: 4,
+                chapter: 'ch1',
+                difficulty: 'مفهومی',
+                question: 'در مورد فعالیت‌های انعکاسی (بازتابی) کدام عبارت زیر کاملاً درست است؟',
+                options: [
+                    'اگر کسی در اثر تصادف قطع نخاع شود، هیچ کدام از اعمال بازتابی در بدن او انجام نمی‌شود.',
+                    'اگر انسان بخواهد می‌تواند از انجام شدن برخی از آن‌ها جلوگیری کند، هر چند این کار درست نیست و ممکن است به زیان انسان باشد.',
+                    'چون هنرپیشه‌ها می‌توانند در فیلم‌ها گریه کنند، نتیجه می‌گیریم ریزش اشک اصلاً عملی بازتابی نیست.',
+                    'اعمال بازتابی بدون فکر کردن انجام می‌شوند و همیشه در حفظ سلامتی انسان نقش دارند.'
+                ],
+                correctIndex: 1,
+                explanation: 'بسیاری از انعکاس‌ها مثل عطسه، سرفه یا حتی عقب کشیدن دست هنگام آزمایش پزشکی را می‌توان با اراده و فرمان قشر مخ مهار کرد (هرچند جلوگیری از عطسه و سرفه به ضرر بدن است). انعکاس پرش زانو مثال نقض گزینه د است که نقش مستقیم در حفاظت ندارد.'
+            },
+            {
+                id: 5,
+                chapter: 'ch1',
+                difficulty: 'سطح سمپاد',
+                question: 'چند مورد از عبارت‌های زیر در مورد دستگاه عصبی انسان درست است؟\nالف) بخش خاکستری نخاع در بخش داخلی و بخش سفید در اطراف آن قرار دارد.\nب) مخچه بخشی از دستگاه عصبی مرکزی است که مانند مخ توانایی یادگیری (مثل یادگیری دوچرخه‌سواری) دارد.\nج) دو نیمکره مخ به وسیله جسم پینه‌ای با یکدیگر ارتباط دارند.\nد) تندتر تپیدن قلب پس از ورزش، غیرارادی بوده اما انعکاسی (بازتابی) نیست.',
+                options: [
+                    '۱ مورد',
+                    '۲ مورد',
+                    '۳ مورد',
+                    '۴ مورد'
+                ],
+                correctIndex: 3,
+                explanation: 'هر ۴ مورد کاملاً درست هستند! مخچه علاوه بر حفظ تعادل، در یادگیری مهارت‌های حرکتی (مثل دوچرخه‌سواری و تایپ کردن) نقش دارد. افزایش ضربان قلب هنگام ورزش یک تنظیم خودکار غیرارادی است اما بازتابی محسوب نمی‌شود.'
+            },
+            {
+                id: 6,
+                chapter: 'ch1',
+                difficulty: 'مفهومی',
+                question: 'اگر بخشی از مغز که شبیه اسب دریایی است (هیپوکامپ) با عمل جراحی از مغز فردی خارج شود، کدام مشکل برای او پیش می‌آید؟',
+                options: [
+                    'فرد نمی‌تواند درس‌های تازه زیست‌شناسی را یاد بگیرد.',
+                    'فرد نمی‌تواند شعری جدید را حفظ کند.',
+                    'فرد نام و چهره بستگان قدیمی خود را که از کودکی می‌شناخته فراموش می‌کند.',
+                    'موارد ۱ و ۲ درست هستند.'
+                ],
+                correctIndex: 3,
+                explanation: 'هیپوکامپ مسئول یادگیری مطالب جدید و تبدیل حافظه کوتاه‌مدت به بلندمدت است؛ بنابراین فرد در یادگیری درس جدید و حفظ شعر تازه ناتوان می‌شود، اما خاطرات تثبیت‌شده قدیمی در قشر مخ باقی می‌مانند.'
+            },
+            {
+                id: 7,
+                chapter: 'ch1',
+                difficulty: 'سطح سمپاد',
+                question: 'در آزمایشی، دو موش هم‌سن را در دو قفس متفاوت قرار دادند؛ یکی در قفسی پر از وسایل بازی و دیگری در قفسی خالی. پس از بررسی نورون‌های بخش خاکستری مغز آن‌ها، مشخص شد انشعابات دندریتی موش اول بسیار بیشتر است. این آزمایش نشان‌دهنده کدام مورد زیر نیست؟',
+                options: [
+                    'اثر محیط و آموزش بر ساختار و عملکرد مغز',
+                    'انعطاف‌پذیری و تغییرپذیری مغز (نوروپلاستیسیتی)',
+                    'متغیر بودن تعداد ارتباطات سیناپسی در افراد مختلف',
+                    'ترمیم و تقسیم مجدد نورون‌های آسیب‌دیده سیستم عصبی'
+                ],
+                correctIndex: 3,
+                explanation: 'افزایش انشعابات دندریتی و سیناپس‌ها به دلیل تحریک محیطی، نشان‌دهنده انعطاف‌پذیری مغز و تفاوت ارتباطات عصبی است، نه تقسیم و ترمیم نورون‌های از بین رفته (زیرا نورون‌های بالغ تقسیم نمی‌شوند).'
+            },
+            {
+                id: 8,
+                chapter: 'ch1',
+                difficulty: 'تحلیلی',
+                question: 'مریم با نوک مداد کف پای راست برادر خود را تحریک می‌کند. پیام عصبی ایجاد شده به کمک ................ به نیمکره ................ مخ برادرش منتقل می‌شود.',
+                options: [
+                    'هیپوکامپ - راست',
+                    'آمیگدال - چپ',
+                    'تالاموس - چپ',
+                    'هیپوتالاموس - راست'
+                ],
+                correctIndex: 2,
+                explanation: 'اولاً پیام حسی لامسه کف پا پس از عبور از نخاع وارد تالاموس می‌شود تا پردازش شود. ثانیاً چون مسیرهای عصبی در ساقه مغز تقاطع دارند، پیام‌های حسی سمت راست بدن به نیمکره چپ مخ می‌روند.'
+            },
+            {
+                id: 9,
+                chapter: 'ch1',
+                difficulty: 'سطح سمپاد',
+                question: 'در بدن انسان به ترتیب چند عصب نخاعی و چند ریشه عصب نخاعی وجود دارد؟',
+                options: [
+                    '۳۱ عدد - ۱۲۴ عدد',
+                    '۳۱ جفت - ۶۲ عدد',
+                    '۶۲ عدد - ۶۲ جفت',
+                    '۶۲ جفت - ۱۲۴ عدد'
+                ],
+                correctIndex: 2,
+                explanation: 'در انسان ۳۱ جفت عصب نخاعی (معادل ۶۲ عصب نخاعی) وجود دارد. هر عصب نخاعی از به هم پیوستن دو ریشه (یک ریشه پشتی و یک ریشه شکمی) تشکیل می‌شود؛ پس ۶۲ عصب × ۲ ریشه = ۱۲۴ ریشه عصب نخاعی (معادل ۶۲ جفت ریشه).'
+            },
+            {
+                id: 10,
+                chapter: 'ch1',
+                difficulty: 'مفهومی',
+                question: 'کدام یک از پیام‌های عصبی زیر بدون عبور از تالاموس به بخش مربوطه در قشر مخ می‌رود؟',
+                options: [
+                    'مزه شکلات تلخ (چشایی)',
+                    'صدای بوق ماشین (شنوایی)',
+                    'بوی گل شب‌بو (بویایی)',
+                    'خارش کف دست (لامسه)'
+                ],
+                correctIndex: 2,
+                explanation: 'پیام عصبی گیرنده‌های بویایی در سقف حفره بینی مستقیماً به پیاز بویایی و قشر مخ می‌رود و از تالاموس عبور نمی‌کند.'
+            },
+            {
+                id: 11,
+                chapter: 'ch1',
+                difficulty: 'تحلیلی',
+                question: 'ویروس فلج اطفال با نفوذ به ماده خاکستری نخاع سبب از بین رفتن جسم سلولی نورون‌ها و ایجاد فلج حرکتی عضلات می‌شود. در این صورت به کدام یک از سلول‌های زیر آسیب کمتری وارد می‌شود؟',
+                options: [
+                    'نورون رابط',
+                    'نورون حرکتی',
+                    'نورون حسی',
+                    'سلول‌های پشتیبان ماده خاکستری'
+                ],
+                correctIndex: 2,
+                explanation: 'جسم سلولی نورون‌های رابط و حرکتی درون ماده خاکستری نخاع قرار دارد، اما جسم سلولی نورون‌های حسی بیرون از نخاع (در گره عصبی ریشه پشتی) واقع شده است؛ بنابراین کمترین آسیب به نورون حسی وارد می‌شود.'
+            },
+            {
+                id: 12,
+                chapter: 'ch2',
+                difficulty: 'مفهومی',
+                question: 'کدام گزینه در مورد مقایسه بافت استخوانی و ماهیچه‌ای در بدن انسان نادرست است؟',
+                options: [
+                    'بافت استخوانی متراکم در تنه استخوان‌های دراز و سطح استخوان‌های پهن یافت می‌شود.',
+                    'سلول‌های ماهیچه قلبی همانند ماهیچه اسکلتی مخطط هستند اما برخلاف آن منشعب می‌باشند.',
+                    'گیرنده درد برخلاف گیرنده فشار فاقد غلاف پیوندی است و به لایه اپیدرم وارد می‌شود.',
+                    'هنگام باز شدن مفصل آرنج (صاف شدن ساعد)، ماهیچه جلوبازو منقبض و پشت‌بازو منبسط است.'
+                ],
+                correctIndex: 3,
+                explanation: 'هنگام خم شدن ساعد، ماهیچه جلوبازو منقبض و پشت‌بازو منبسط است؛ اما هنگام باز شدن (صاف شدن) ساعد، برعکس عمل می‌کنند: پشت‌بازو منقبض و جلوبازو منبسط می‌شود.'
+            },
+            {
+                id: 13,
+                chapter: 'ch3',
+                difficulty: 'ترکیبی',
+                question: 'در مورد غده پانکراس (لوزالمعده) و بیماری آکرومگالی کدام گزینه صحیح است؟',
+                options: [
+                    'بخش درون‌ریز پانکراس حدود ۹۵ درصد حجم آن را تشکیل می‌دهد و آنزیم گوارشی می‌سازد.',
+                    'بیماری آکرومگالی در اثر افزایش هورمون رشد در دوران کودکی و قبل از بسته شدن صفحات رشد رخ می‌دهد.',
+                    'جزایر لانگرهانس در پانکراس دارای مویرگ‌های خونی فراوان بوده و هورمون‌های تنظیم‌کننده قند خون را به خون می‌ریزند.',
+                    'ماندگاری پیام‌های عصبی نسبت به پیام‌های هورمونی بیشتر است.'
+                ],
+                correctIndex: 2,
+                explanation: 'جزایر لانگرهانس (بخش درون‌ریز پانکراس) حدود ۵ درصد پانکراس را تشکیل می‌دهند و انسولین و گلوکاگون را مستقیم به خون ترشح می‌کنند. آکرومگالی بعد از بلوغ رخ می‌دهد.'
+            },
+            {
+                id: 14,
+                chapter: 'ch4',
+                difficulty: 'مفهومی',
+                question: 'در کدام مرحله از تقسیم میتوز، کروماتیدهای خواهری از محل سانترومر از یکدیگر جدا شده و به سمت دو قطب سلول کشیده می‌شوند؟',
+                options: [
+                    'پروفاز',
+                    'متافاز',
+                    'آنافاز',
+                    'تلوفاز'
+                ],
+                correctIndex: 2,
+                explanation: 'در پروفاز کروموزوم‌ها فشرده می‌شوند، در متافاز در استوای سلول ردیف می‌شوند، در آنافاز کروماتیدهای خواهری از سانترومر جدا می‌شوند و در تلوفاز پوشش هسته دوباره تشکیل می‌شود.'
+            },
+            {
+                id: 15,
+                chapter: 'ch5',
+                difficulty: 'ترکیبی',
+                question: 'کدام گزینه در مورد تولیدمثل در جانداران و مقایسه گامت‌ها نادرست است؟',
+                options: [
+                    'گامت نر (اسپرم) نسبت به گامت ماده اندوخته غذایی کمتری دارد و دارای تاژک است.',
+                    'گامت‌ها با تقسیم میوز تولید می‌شوند تا تعداد کروموزوم‌های هر گونه در نسل‌های بعد ثابت بماند.',
+                    'خزه و سرخس از طریق هاگ‌زایی و اسفنج و مخمر از طریق جوانه زدن تولیدمثل غیرجنسی انجام می‌دهند.',
+                    'در جانوران دارای لقاح خارجی مثل ماهی‌ها، تعداد گامت‌های تولیدی کم بوده و والدین از تخم‌ها مراقبت می‌کنند.'
+                ],
+                correctIndex: 3,
+                explanation: 'در لقاح خارجی (ماهی‌ها و دوزیستان)، چون گامت‌ها در آب رها می‌شوند و احتمال برخورد آن‌ها کم است، تعداد گامت‌های رها شده بسیار زیاد است و عموماً مراقبتی از تخم‌ها صورت نمی‌گیرد.'
+            }
+        ];
+
+        // ============================================================================
+        // ۴. مدیریت وضعیت برنامه (State Management)
+        // ============================================================================
+        let currentTab = 'dashboard';
+        let selectedChapter = 'all';
+        let searchQuery = '';
+        let masteredNotes = new Set(JSON.parse(localStorage.getItem('sampad_mastered_notes') || '[]'));
+
+        // وضعیت فلش‌کارت‌ها
+        let filteredFlashcards = [...flashcardsData];
+        let currentFcIndex = 0;
+        let isFcFlipped = false;
+
+        // وضعیت آزمون
+        let userAnswers = {}; // { questionId: selectedOptionIndex }
+        let timerSeconds = 0;
+        let timerInterval = null;
+
+        // ============================================================================
+        // ۵. توابع اصلی رندر و تعامل رابط کاربری
+        // ============================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDashboardStats();
+            renderNotes();
+            updateFlashcardsList();
+            renderQuiz();
+            startTimer();
+        });
+
+        // جابجایی بین تب‌ها
+        function switchTab(tabName) {
+            currentTab = tabName;
+            
+            // مخفی کردن همه نماها
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-flashcards').classList.add('hidden');
+            document.getElementById('view-quiz').classList.add('hidden');
+            
+            // نمایش نمای انتخابی
+            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+
+            // استایل دکمه‌های ناوبری
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-600', 'text-white', 'shadow');
+                btn.classList.add('text-slate-300', 'hover:text-white');
+            });
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+            activeBtn.classList.remove('text-slate-300', 'hover:text-white');
+            activeBtn.classList.add('bg-emerald-600', 'text-white', 'shadow');
+        }
+
+        // تغییر فیلتر فصل
+        function setChapterFilter(chapter) {
+            selectedChapter = chapter;
+            
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                if (chip.dataset.chapter === chapter) {
+                    chip.className = 'filter-chip px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-900 text-white shadow-sm transition-all';
+                } else {
+                    chip.className = 'filter-chip px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all';
+                }
+            });
+
+            handleFilterChange();
+        }
+
+        // اعمال همزمان فیلتر فصل و جستجو در کل بخش‌ها
+        function handleFilterChange() {
+            searchQuery = document.getElementById('global-search').value.trim().toLowerCase();
+            renderNotes();
+            updateFlashcardsList();
+            renderQuiz();
+        }
+
+        // ============================================================================
+        // ۶. منطق بخش جزوه و آکاردئون‌ها
+        // ============================================================================
+        function renderNotes() {
+            const container = document.getElementById('notes-container');
+            const filtered = studyNotes.filter(note => {
+                const matchChapter = selectedChapter === 'all' || note.chapter === selectedChapter;
+                const fullText = `${note.title} ${note.summary} ${note.points.join(' ')} ${note.sampadTip}`.toLowerCase();
+                const matchSearch = !searchQuery || fullText.includes(searchQuery);
+                return matchChapter && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-2xl p-10 text-center border border-slate-200">
+                        <p class="text-slate-500 font-bold">موردی با عبارت جستجو شده در این فصل یافت نشد.</p>
+                        <button onclick="document.getElementById('global-search').value=''; setChapterFilter('all');" class="mt-3 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold">نمایش همه مطالب</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map((note, idx) => {
+                const isMastered = masteredNotes.has(note.id);
+                return `
+                <div class="bg-white rounded-2xl border ${isMastered ? 'border-emerald-400/70' : 'border-slate-200'} shadow-sm overflow-hidden transition-all">
+                    <!-- هدر آکاردئون -->
+                    <div onclick="toggleAccordion('${note.id}')" class="p-5 cursor-pointer flex items-center justify-between gap-4 hover:bg-slate-50/80 transition select-none">
+                        <div class="flex items-start sm:items-center gap-3.5 flex-col sm:flex-row">
+                            <span class="px-3 py-1 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap">
+                                ${note.chapterTitle}
+                            </span>
+                            <h3 class="text-base sm:text-lg font-extrabold text-slate-800">${note.title}</h3>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <span class="hidden md:inline-block px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 text-blue-800">${note.badge}</span>
+                            <svg id="icon-${note.id}" class="w-5 h-5 text-slate-500 transition-transform duration-300 ${idx === 0 ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- محتوای بازشونده آکاردئون -->
+                    <div id="content-${note.id}" class="accordion-content ${idx === 0 ? 'open' : ''}">
+                        <div class="accordion-inner">
+                            <div class="p-5 pt-0 border-t border-slate-100 space-y-4">
+                                <p class="text-sm text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-200/60 leading-relaxed mt-4">
+                                    ${note.summary}
+                                </p>
+
+                                <ul class="space-y-2.5 text-sm text-slate-700 leading-7">
+                                    ${note.points.map(pt => `
+                                        <li class="flex items-start gap-2.5">
+                                            <span class="w-2 h-2 rounded-full bg-emerald-500 mt-2.5 shrink-0"></span>
+                                            <span>${pt}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+
+                                <!-- باکس نکته طلایی سمپاد -->
+                                <div class="bg-gradient-to-l from-amber-50 to-orange-50/60 border-r-4 border-amber-500 p-4 rounded-xl">
+                                    <div class="text-xs font-extrabold text-amber-800 flex items-center gap-1.5 mb-1">
+                                        <svg class="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                        نکته ترکیبی و تله طراحان تیزهوشان:
+                                    </div>
+                                    <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${note.sampadTip}</p>
+                                </div>
+
+                                <!-- دکمه ثبت مطالعه -->
+                                <div class="flex justify-end pt-2">
+                                    <button onclick="toggleMastered('${note.id}')" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 ${isMastered ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700'}">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        ${isMastered ? 'تسلط کامل ثبت شد ✓' : 'علامت‌گذاری به عنوان مطالعه شده'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(`content-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            content.classList.toggle('open');
+            icon.classList.toggle('rotate-180');
+        }
+
+        function toggleAllAccordions(openState) {
+            document.querySelectorAll('.accordion-content').forEach(el => {
+                if (openState) el.classList.add('open');
+                else el.classList.remove('open');
+            });
+            document.querySelectorAll('[id^="icon-"]').forEach(icon => {
+                if (openState) icon.classList.add('rotate-180');
+                else icon.classList.remove('rotate-180');
+            });
+        }
+
+        function toggleMastered(noteId) {
+            if (masteredNotes.has(noteId)) {
+                masteredNotes.delete(noteId);
+            } else {
+                masteredNotes.add(noteId);
+            }
+            localStorage.setItem('sampad_mastered_notes', JSON.stringify([...masteredNotes]));
+            updateDashboardStats();
+            renderNotes();
+        }
+
+        function updateDashboardStats() {
+            document.getElementById('stat-notes-count').textContent = toPersianDigits(studyNotes.length);
+            document.getElementById('stat-questions-count').textContent = toPersianDigits(quizQuestions.length);
+            const percent = Math.round((masteredNotes.size / studyNotes.length) * 100);
+            document.getElementById('stat-mastered-count').textContent = toPersianDigits(percent) + '٪';
+        }
+
+        // ============================================================================
+        // ۷. منطق بخش فلش‌کارت‌ها
+        // ============================================================================
+        function updateFlashcardsList() {
+            filteredFlashcards = flashcardsData.filter(fc => {
+                const matchChapter = selectedChapter === 'all' || fc.chapter === selectedChapter;
+                const matchSearch = !searchQuery || `${fc.front} ${fc.back} ${fc.tip}`.toLowerCase().includes(searchQuery);
+                return matchChapter && matchSearch;
+            });
+            currentFcIndex = 0;
+            isFcFlipped = false;
+            renderCurrentFlashcard();
+        }
+
+        function renderCurrentFlashcard() {
+            const inner = document.getElementById('flashcard-inner');
+            inner.classList.remove('rotate-y-180');
+            isFcFlipped = false;
+
+            if (filteredFlashcards.length === 0) {
+                document.getElementById('fc-chapter-badge').textContent = 'بدون نتیجه';
+                document.getElementById('fc-counter').textContent = '۰ از ۰';
+                document.getElementById('fc-front-text').textContent = 'فلش‌کارتی با این فیلتر یافت نشد.';
+                document.getElementById('fc-back-text').textContent = '';
+                document.getElementById('fc-tip-box').textContent = '';
+                return;
+            }
+
+            const card = filteredFlashcards[currentFcIndex];
+            document.getElementById('fc-chapter-badge').textContent = card.chapterName;
+            document.getElementById('fc-counter').textContent = `کارت ${toPersianDigits(currentFcIndex + 1)} از ${toPersianDigits(filteredFlashcards.length)}`;
+            document.getElementById('fc-front-text').textContent = card.front;
+            document.getElementById('fc-back-text').textContent = card.back;
+            document.getElementById('fc-tip-box').innerHTML = `<strong>نکته تکمیلی:</strong> ${card.tip}`;
+        }
+
+        function flipFlashcard() {
+            if (filteredFlashcards.length === 0) return;
+            isFcFlipped = !isFcFlipped;
+            const inner = document.getElementById('flashcard-inner');
+            if (isFcFlipped) inner.classList.add('rotate-y-180');
+            else inner.classList.remove('rotate-y-180');
+        }
+
+        function nextFlashcard() {
+            if (filteredFlashcards.length === 0) return;
+            currentFcIndex = (currentFcIndex + 1) % filteredFlashcards.length;
+            renderCurrentFlashcard();
+        }
+
+        function prevFlashcard() {
+            if (filteredFlashcards.length === 0) return;
+            currentFcIndex = (currentFcIndex - 1 + filteredFlashcards.length) % filteredFlashcards.length;
+            renderCurrentFlashcard();
+        }
+
+        function shuffleFlashcards() {
+            if (filteredFlashcards.length <= 1) return;
+            for (let i = filteredFlashcards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [filteredFlashcards[i], filteredFlashcards[j]] = [filteredFlashcards[j], filteredFlashcards[i]];
+            }
+            currentFcIndex = 0;
+            renderCurrentFlashcard();
+        }
+
+        // ============================================================================
+        // ۸. منطق بخش آزمون آنلاین و بانک سوالات
+        // ============================================================================
+        function getFilteredQuestions() {
+            return quizQuestions.filter(q => {
+                const matchChapter = selectedChapter === 'all' || q.chapter === selectedChapter;
+                const matchSearch = !searchQuery || `${q.question} ${q.options.join(' ')} ${q.explanation}`.toLowerCase().includes(searchQuery);
+                return matchChapter && matchSearch;
+            });
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('questions-container');
+            const questions = getFilteredQuestions();
+
+            updateQuizProgress(questions);
+
+            if (questions.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-2xl p-10 text-center border border-slate-200">
+                        <p class="text-slate-500 font-bold">سوالی مطابق با جستجو یا فصل انتخابی یافت نشد.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const optionLetters = ['الف', 'ب', 'ج', 'د'];
+
+            container.innerHTML = questions.map((q, qIdx) => {
+                const userChoice = userAnswers[q.id];
+                const isAnswered = userChoice !== undefined;
+                const isCorrect = userChoice === q.correctIndex;
+
+                return `
+                <div class="bg-white rounded-2xl border ${isAnswered ? (isCorrect ? 'border-emerald-400' : 'border-rose-300') : 'border-slate-200'} p-6 shadow-sm transition-all">
+                    <!-- سربرگ سوال -->
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-xl bg-slate-900 text-white font-extrabold text-sm flex items-center justify-center">
+                                ${toPersianDigits(qIdx + 1)}
+                            </span>
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                ${getChapterLabel(q.chapter)}
+                            </span>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600">${q.difficulty}</span>
+                    </div>
+
+                    <!-- متن سوال -->
+                    <p class="text-sm sm:text-base font-bold text-slate-800 leading-8 whitespace-pre-line mb-5">
+                        ${q.question}
+                    </p>
+
+                    <!-- گزینه‌ها -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${q.options.map((opt, optIdx) => {
+                            let btnClass = 'border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/40 text-slate-700';
+                            let badgeClass = 'bg-slate-100 text-slate-700';
+
+                            if (isAnswered) {
+                                if (optIdx === q.correctIndex) {
+                                    btnClass = 'border-emerald-600 bg-emerald-50 text-emerald-900 font-bold ring-2 ring-emerald-500/20';
+                                    badgeClass = 'bg-emerald-600 text-white';
+                                } else if (optIdx === userChoice && userChoice !== q.correctIndex) {
+                                    btnClass = 'border-rose-500 bg-rose-50 text-rose-900 font-bold';
+                                    badgeClass = 'bg-rose-600 text-white';
+                                } else {
+                                    btnClass = 'border-slate-200 opacity-60 text-slate-500';
+                                }
+                            }
+
+                            return `
+                            <button onclick="selectOption(${q.id}, ${optIdx})" class="w-full text-right p-3.5 rounded-xl border-2 transition-all flex items-center gap-3 ${btnClass}">
+                                <span class="w-7 h-7 rounded-lg text-xs font-extrabold flex items-center justify-center shrink-0 ${badgeClass}">
+                                    ${optionLetters[optIdx]}
+                                </span>
+                                <span class="text-xs sm:text-sm leading-6">${opt}</span>
+                            </button>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <!-- باکس پاسخ تشریحی فوری پس از انتخاب گزینه -->
+                    ${isAnswered ? `
+                        <div class="mt-5 p-4 rounded-2xl ${isCorrect ? 'bg-emerald-50/80 border border-emerald-200' : 'bg-rose-50/70 border border-rose-200'} animate-fadeIn">
+                            <div class="flex items-center gap-2 text-xs sm:text-sm font-extrabold ${isCorrect ? 'text-emerald-800' : 'text-rose-800'} mb-1.5">
+                                <span>${isCorrect ? '✓ آفرین! پاسخ شما کاملاً صحیح است.' : `✕ پاسخ نادرست! گزینه صحیح «${optionLetters[q.correctIndex]}» است.`}</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-700 leading-7">
+                                <strong class="text-slate-900">تحلیل علمی و علت بررسی گزینه‌ها:</strong> ${q.explanation}
+                            </p>
+                        </div>
+                    ` : ''}
+                </div>
+                `;
+            }).join('');
+        }
+
+        function selectOption(questionId, optionIndex) {
+            userAnswers[questionId] = optionIndex;
+            renderQuiz();
+        }
+
+        function updateQuizProgress(questions) {
+            const answeredInView = questions.filter(q => userAnswers[q.id] !== undefined).length;
+            document.getElementById('quiz-progress-text').textContent = `${toPersianDigits(answeredInView)} از ${toPersianDigits(questions.length)}`;
+        }
+
+        function calculateExamResult() {
+            const questions = getFilteredQuestions();
+            if (questions.length === 0) return;
+
+            let correct = 0;
+            let wrong = 0;
+            let unanswered = 0;
+
+            questions.forEach(q => {
+                const ans = userAnswers[q.id];
+                if (ans === undefined) unanswered++;
+                else if (ans === q.correctIndex) correct++;
+                else wrong++;
+            });
+
+            // فرمول استاندارد درصد با نمره منفی (هر ۳ غلط یک درست را خنثی می‌کند)
+            const rawScore = (correct * 3) - wrong;
+            const maxScore = questions.length * 3;
+            const percentage = Math.max(0, Math.round((rawScore / maxScore) * 100));
+            // محاسبه تراز تخمینی سمپاد (بین ۵۰۰۰ تا ۸۵۰۰)
+            const taraz = Math.round(5000 + (percentage * 35));
+
+            document.getElementById('res-percent').textContent = toPersianDigits(percentage) + '٪';
+            document.getElementById('res-taraz').textContent = toPersianDigits(taraz);
+            document.getElementById('res-correct').textContent = toPersianDigits(correct);
+            document.getElementById('res-wrong').textContent = `${toPersianDigits(wrong)} / ${toPersianDigits(unanswered)}`;
+
+            let title = 'عملکرد عالی و در سطح قبولی سمپاد!';
+            if (percentage < 40) title = 'نیاز به مرور مجدد جزوه و نکات ترکیبی';
+            else if (percentage < 70) title = 'عملکرد خوب! با دقت بیشتر به تراز برتر می‌رسید';
+
+            document.getElementById('result-title').textContent = title;
+            const resultBox = document.getElementById('exam-result-box');
+            resultBox.classList.remove('hidden');
+            resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetQuiz() {
+            userAnswers = {};
+            timerSeconds = 0;
+            document.getElementById('exam-result-box').classList.add('hidden');
+            renderQuiz();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+                const secs = String(timerSeconds % 60).padStart(2, '0');
+                document.getElementById('quiz-timer').textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        // ============================================================================
+        // ۹. توابع کمکی
+        // ============================================================================
+        function getChapterLabel(ch) {
+            const map = {
+                ch1: 'فصل ۱: تنظیم عصبی',
+                ch2: 'فصل ۲: حس و حرکت',
+                ch3: 'فصل ۳: تنظیم هورمونی',
+                ch4: 'فصل ۴: زیست‌فناوری',
+                ch5: 'فصل ۵: تولیدمثل'
+            };
+            return map[ch] || 'زیست هشتم';
+        }
+
+        function toPersianDigits(num) {
+            const persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return String(num).replace(/\d/g, d => persian[d]);
+        }
+    </script>
+</body>
+</html>
